@@ -5,7 +5,7 @@ int array_size(size_t *size);
 int* memory_allocation(size_t size);
 int input(int *array, size_t size);
 void output(int *array, size_t size);
-void quick_sort1(int *number, int first, int last);
+void quick_sort1(int *array, int low, int high);
 void swap(int *a, int *b);
 int partition(int *array, int low, int high);
 void quick_sort2(int *array, int low, int high);
