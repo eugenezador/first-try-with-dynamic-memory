@@ -1,86 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int number(int *n);
-int *allocate(int *a, int n, int *f);
-int input(int *a, int n);
-void sort(int *a, int n);
-void output(int *a, int n);
+#include <crtdbg.h>// for leak detecting
+
+int array_size(size_t* size);
+int* memory_allocation(size_t size);
+int input(int* array, size_t size);
+void output(int* array, size_t size);
+void swap(int* a, int* b);
+int partition(int* array, int low, int high);
+void quick_sort(int* array, int low, int high);
 
 int main() {
-  int *a;
-  int n;
-  int flag = 0;
-  if (number(&n)) {
-    printf("n/a");
-  } else {
-    a = allocate(a, n, &flag);
-    if (flag != 0)
-      printf("n/a");
-    // a = (int*) calloc(n, sizeof(int));
-    // if(NULL == a){
-    //     printf("n/a");
-    // }
-
-    if (input(a, n)) {
-      printf("n/a");
-    } else {
-      sort(a, n);
-      output(a, n);
+    size_t size;
+    if (!array_size(&size)) {
+        printf("n/a");
     }
-  }
-    free(a);
-  return 0;
-}
+    else {
+        int* array = memory_allocation(size);
+        if (array == NULL) {
+            printf("n/a");
+        }
+        else {
+            if (input(array, size)) {
+                quick_sort(array, 0, size - 1);
+                output(array, size);
+            }
+            else {
+                printf("n/a");
+            }
 
-int number(int *n) {
-  int flag = 0;
-  char c;
-  if (scanf("%d%c", n, &c) == 2 && c == '\n') {
-    if (*n <= 0) {
-      flag++;
+            free(array);
+        }
     }
-  }
-  return flag;
+
+    _CrtDumpMemoryLeaks();//for report leak detecting
+    return 0;
 }
 
-int *allocate(int *a, int n, int *f) {
-  a = (int *)calloc(n, sizeof(int));
-  if (NULL == a) {
-    f++;
-  }
-  return a;
-}
-
-int input(int *a, int n) {
-  char c;
-  for (int i = 0; i < n; i++) {
-    if (scanf("%d%c", a + i, &c) != 2)
-      return 1;
-    if (c != ' ' && c != '\n') {
-      return 1;
+int array_size(size_t* size) {
+    int f = 1;
+    if (!scanf("%ld", size) && *size <= 0) {
+        f = 0;
     }
-  }
-  return 0;
+    return f;
 }
 
-void sort(int *a, int n) {
-  int temp;
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n - i - 1; j++) {
-      if (a[j] > a[j + 1]) {
-        temp = a[j];
-        a[j] = a[j + 1];
-        a[j + 1] = temp;
-      }
+int* memory_allocation(size_t size) {
+    return (int*)malloc(size * sizeof(int));
+}
+
+int input(int* array, size_t size) {
+    int f = 1;
+    for (size_t i = 0; i < size; i++) {
+        if (!scanf("%d", array++)) {
+            f = 0;
+        }
     }
-  }
+    return f;
 }
 
-void output(int *a, int n) {
-  for (int i = 0; i < n; i++) {
-    printf("%d", a[i]);
-    if (i != n - 1)
-      printf("%c", ' ');
-  }
+void output(int* array, size_t size) {
+    printf("%d", array[0]);
+    for (size_t i = 1; i < size; i++) {
+        printf(" %d", array[i]);
+    }
+}
+
+void swap(int* a, int* b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+int partition(int* array, int low, int high) {
+    int pivot = array[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (array[j] < pivot) {
+            i++;
+            swap(&array[i], &array[j]);
+        }
+    }
+
+    swap(&array[i + 1], &array[high]);
+    return i + 1;
+}
+
+void quick_sort(int* array, int low, int high) {
+    if (low < high) {
+        int pivot = partition(array, low, high);
+
+        quick_sort(array, low, pivot - 1);
+        quick_sort(array, pivot + 1, high);
+    }
 }
