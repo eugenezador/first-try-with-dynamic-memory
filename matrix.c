@@ -19,6 +19,9 @@ void dynamic_allocation_var_2(int** dynamic_array, int* array_value, const int r
 int** allocation_var_2(int** dynamic_array, int* array_value, const int rows, const int cols);
 void free_var_2_allocation(int** dynamic_array, int* array_value);
 
+void dynamic_allocation_var_3(int** dynamic_array, const int rows, const int cols);
+int** allocation_var_3(int** dynamic_array, const int rows, const int cols);
+
 
 int dynamic_array_input(int** dynamic_array, const int rows, const int cols);
 void dynamic_array_output(int** dynamic_array, const int rows, const int cols);
@@ -48,7 +51,9 @@ int main() {
 			case 3:
 				dynamic_allocation_var_2(dynamic_array, array_value, rows, cols);
 				break;
-
+			case 4:
+				dynamic_allocation_var_3(dynamic_array, rows, cols);
+				break;
 			}
 		}
 	}
@@ -178,7 +183,36 @@ void free_var_2_allocation(int** dynamic_array, int* array_value) {
 }
 
 
+void dynamic_allocation_var_3(int** dynamic_array, const int rows, const int cols) {
+	
+	dynamic_array = allocation_var_1(dynamic_array, rows, cols);
 
+	if (dynamic_array == NULL) {
+		printf("Allocation error");
+	}
+	else {
+
+		if (dynamic_array_input(dynamic_array, rows, cols)) {
+			dynamic_array_output(dynamic_array, rows, cols);
+		}
+		else {
+			printf("Incorrect input of dynamic array");
+		}
+
+		free(dynamic_array);
+	}
+}
+int** allocation_var_3(int** dynamic_array, const int rows, const int cols) {
+	
+	dynamic_array = (int**)malloc(rows * sizeof(int*) + rows * cols * sizeof(int));
+	int* ptr = (int*)(dynamic_array + rows);
+
+	for (int i = 0; i < rows; i++) {
+		dynamic_array[i] = ptr + cols * i;
+	}
+
+	return dynamic_array;
+}
 
 int dynamic_array_input(int** dynamic_array, const int rows, const int cols) {
 	int flag = 1;
