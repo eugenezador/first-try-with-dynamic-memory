@@ -1,17 +1,17 @@
+#include<stdio.h>
+#include<stdlib.h>
+
 #define N 15
 #define M 13
 
-void transform(int *buf, int **matr, int n, int m);
-void make_picture(int **picture, int n, int m);
-void reset_picture(int **picture, int n, int m);
+void transform(int *buf, int **matr, int rows, int cols);
+void make_picture(int **picture, int rows, int cols);
+void reset_picture(int **picture, int rows, int cols);
 
 void main()
 {
-   int picture_data[N][M];
-   int *picture[N];
-   transform(picture, picture_data, N, M);
-
-   make_picture(picture, n, m);
+   int picture[N][M];
+   make_picture(picture, N, M);
 }
 
 void make_picture(int **picture, int n, int m)
@@ -29,6 +29,8 @@ void make_picture(int **picture, int n, int m)
 
    reset_picture(picture, n, m);
 
+
+
    int length_frame_w = sizeof(frame_w) / sizeof(frame_w[0]);
    
    for (int i = 0; i < length_frame_w; i++)
@@ -37,21 +39,22 @@ void make_picture(int **picture, int n, int m)
    }
 }
 
-void reset_picture(int **picture, int n, int m)
+void reset_picture(int **picture, int rows, int cols)
 {
-   for (int i = 0; i < m; i++)
+   for (int i = 0; i < rows; i++)
    {
-      for (int j = 0; j < n; j++)
+      for (int j = 0; j < cols; j++)
       {
          picture[i][j] = 0;
       }  
    }
 }
 
-void transform(int *buf, int **matr, int n, int m)
+void transform(int *buf, int **matr, int rows, int cols)
 {  
-   for(int i = 0; i < n; i++)
+   for(int i = 0; i < rows; i++)
    {
-      matr[i] = buf + i * m;
+      matr[i] = buf + i * cols;
    }
 }
+
