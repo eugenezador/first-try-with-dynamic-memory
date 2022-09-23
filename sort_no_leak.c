@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <crtdbg.h>// for leak detecting
+//#include <crtdbg.h>// for leak detecting in Win
 
 int array_size(size_t* size);
 int* memory_allocation(size_t size);
@@ -34,7 +34,7 @@ int main() {
         }
     }
 
-    _CrtDumpMemoryLeaks();//for report leak detecting
+    //_CrtDumpMemoryLeaks();//for report leak detecting in Win
     return 0;
 }
 
